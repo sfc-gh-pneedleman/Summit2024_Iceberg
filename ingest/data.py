@@ -27,9 +27,14 @@ fake.add_provider(MarkdownPostProvider)
 #print(fake_post)
 
 adr= ' '.join(fake.address().splitlines())
+state=fake.state_abbr()
+
+adr2 = str(fake.street_address()) + ', ' + str(fake.city()) + ',' + state + ' '+ fake.postcode_in_state(state)
+
+print(adr2 )
 
 
-print(adr)
+#print(adr)
 
 
 from os.path import join, dirname
