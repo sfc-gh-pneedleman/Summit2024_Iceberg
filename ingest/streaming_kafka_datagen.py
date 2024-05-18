@@ -6,7 +6,7 @@ import time
 import random
 import json
 import string
-from snowflake.snowpark import Session
+#from snowflake.snowpark import Session
 from dotenv import load_dotenv
 from os.path import join, dirname
 import os
@@ -17,24 +17,21 @@ fake = Faker('en_US')
 dotenv_path = join(dirname(__file__),'../../.env')
 load_dotenv(dotenv_path)
 
-connection_parameters = {
-    "account": os.getenv("SF_ACCOUNT"),
-    "user": os.getenv("SF_USER"),
-    "password": os.getenv("SF_PASSWORD"),
-    "role": os.getenv("SF_ROLE"),  
-    "warehouse": os.getenv("SF_WAREHOUSE"),  
-    "database": os.getenv("SF_DATABSE"), 
-    "schema": os.getenv("SF_SCHEMA") 
-  }  
+# connection_parameters = {
+#     "account": os.getenv("SF_ACCOUNT"),
+#     "user": os.getenv("SF_USER"),
+#     "password": os.getenv("SF_PASSWORD"),
+#     "role": os.getenv("SF_ROLE"),  
+#     "warehouse": os.getenv("SF_WAREHOUSE"),  
+#     "database": os.getenv("SF_DATABSE"), 
+#     "schema": os.getenv("SF_SCHEMA") 
+#   }  
 
-#create a session
-session = Session.builder.configs(connection_parameters).create()  
+# #create a session
+# session = Session.builder.configs(connection_parameters).create()  
 
-#get list of customer IDs
-df = session.sql("SELECT CUSTOMER_ID FROM SUMMIT_23_RAW_DB.CUSTOMER_360.CUSTOMER LIMIT 5000000")
-df = df.to_pandas()
 #convert df to list of customer ids
-customer_list = df.values.tolist()
+
 
 #create list of payment Methods 
 payment_list = ['VISA',  'MASTERCARD', 'AMEX', 'DISCOVER', 'GIFT_CARD']
@@ -46,7 +43,7 @@ payment_list = ['VISA',  'MASTERCARD', 'AMEX', 'DISCOVER', 'GIFT_CARD']
 num_messages = 100000
 ##
 ## delay between messages in sec
-delay=.1 #10 MS or 100 per sec
+delay=.01 #10 MS or 100 per sec
 ##
 ##################################
 
@@ -95,12 +92,13 @@ if __name__ == '__main__':
         "txn_id": ''.join(random.choices(string.ascii_lowercase, k=random.randint(1, 1))).capitalize() + "%0.11d" % random.randint(1,99999999999),
         "txn_date": datetime.now().strftime("%m/%d/%Y %I:%M:%S.%f %p"),
         "txn_quantity": random.randint(1, 30),
-        "customer_id":  ''.join(random.choice(customer_list)),
+        "customer_id":  fake.ean(length=13),
         "product_id": ''.join(random.choices(string.ascii_lowercase, k=random.randint(1, 1))).capitalize() + str(random.randint(1, 9)) +'-' + "%0.7d" % random.randint(1,9999999) + ''.join(random.choices(string.ascii_lowercase, k=random.randint(1, 1))).capitalize() ,
         "product_unit_price": random.randint(100, 90000) / 100,
         "product_desc": ''.join(random.choices(string.ascii_lowercase, k=random.randint(6, 20))).capitalize(),
+        "product_review": fake.paragraph(nb_sentences=2),
         "payment_method": ''.join(random.choice(payment_list)),
-        "address":  ' '.join(fake.address().splitlines())
+        "customer_address":  ' '.join(fake.address().splitlines())
         }
         json_data = json.dumps(json_raw)
         key=str(count)
