@@ -83,10 +83,12 @@ if __name__ == '__main__':
         d = random.randint(1, int(time.time()))
         return datetime.fromtimestamp(d).strftime('%Y-%m-%d')
 
-
     
     count = 0
     for _ in range(num_messages):
+
+        #create address from faker 
+        state=fake.state_abbr()
 
         json_raw = {
         "txn_id": ''.join(random.choices(string.ascii_lowercase, k=random.randint(1, 1))).capitalize() + "%0.11d" % random.randint(1,99999999999),
@@ -98,7 +100,7 @@ if __name__ == '__main__':
         "product_desc": ''.join(random.choices(string.ascii_lowercase, k=random.randint(6, 20))).capitalize(),
         "product_review": fake.paragraph(nb_sentences=2),
         "payment_method": ''.join(random.choice(payment_list)),
-        "customer_address":  ' '.join(fake.address().splitlines())
+        "customer_address":  str(fake.street_address()) + ', ' + str(fake.city()) + ', ' + state + ' '+ fake.postcode_in_state(state)
         }
         json_data = json.dumps(json_raw)
         key=str(count)
