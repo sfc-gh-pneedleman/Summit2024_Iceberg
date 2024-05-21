@@ -1,0 +1,7 @@
+#in Databricks or other Spark environment, you will need to connect to your CSP data 
+#in this exmaple I am using Azure and is reflected in the SDK connection using io-impl of Hadoop
+#if using AWS you can use "org.apache.iceberg.aws.s3.S3FileIO" as well as the iceberg awsbundle. 
+#for this Cluster, the following libraries were used from maven 
+
+ - net.snowflake:snowflake-jdbc:3.15.1
+ - org.apache.iceberg:iceberg-spark-runtime-3.3_2.12:1.5.1
