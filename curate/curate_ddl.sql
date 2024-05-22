@@ -99,19 +99,18 @@ SELECT
 ;
 
 --create stream on sales TXN to process changed data
-CREATE STREAM IF NOT EXISTS SALES_TXN_STREAM ON DYNAMIC TABLE SALES_TXN;
+CREATE STREAM IF NOT EXISTS CURATED.SALES_TXN_STREAM ON DYNAMIC TABLE CURATED.SALES_TXN;
 
 
 --create task to load iceberg table from stream
 --use cortex functions for enchanced processing 
-CREATE IF NOT EXISTS TASK INSERT_SALES_TO_ICEBERG
-  SCHEDULE = '1 MINUTE'
-  USER_TASK_MANAGED_INITIAL_WAREHOUSE_SIZE = 'XSMALL'
-  WHEN
-  SYSTEM$STREAM_HAS_DATA('SALES_TXN_STREAM')
-  AS
-    INSERT INTO ICEBERG_SALES_TXN 
-     SELECT 
+create TASK IF NOT EXISTS CURATED.INSERT_SALES_TXN_TO_ICEBERG
+	schedule='1 MINUTE'
+	USER_TASK_MANAGED_INITIAL_WAREHOUSE_SIZE='MEDIUM'
+	when SYSTEM$STREAM_HAS_DATA('SALES_TXN_STREAM')
+	as INSERT INTO ICEBERG_SALES_TXN 
+    SELECT * EXCLUDE ADDRESS_JSON FROM 
+    (SELECT 
          TXN_ID,
     	TXN_QUANTITY,
     	TXN_DATE,
@@ -122,8 +121,19 @@ CREATE IF NOT EXISTS TASK INSERT_SALES_TO_ICEBERG
         SNOWFLAKE.CORTEX.SENTIMENT(PRODUCT_REVIEW) as PRODUCT_REVIEW_SENTIMENT_SCORE,
     	PAYMENT_METHOD,
     	CUSTOMER_ID,
-        CUSTOMER_ADDRESS
-    FROM SALES_TXN_STREAM;
+        CUSTOMER_ADDRESS,
+        TRY_PARSE_JSON( SNOWFLAKE.CORTEX.COMPLETE(
+            'mistral-7b', 
+            'Parse the given address into following JSON values without any comments:
+            [addressNumber, streetName, unitNumber, city, state, zip]' || ' content: ' 
+            || CUSTOMER_ADDRESS ))::variant as Address_JSON,
+       Address_JSON:"addressNumber"::string Street_NUM,
+       Address_JSON:"streetName"::string Street_Name,
+       Address_JSON:"unitNumber"::string Unit_Nmmber,
+       Address_JSON:"city"::string City,   
+       Address_JSON:"state"::string State,
+       Address_JSON:"zip"::string ZIP_CODE
+    FROM CURATED.SALES_TXN_STREAM);
 
 
 --Create Read-ONly Iceberg user with SELECT Grants 
