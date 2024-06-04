@@ -29,7 +29,7 @@ fake.add_provider(MarkdownPostProvider)
 adr= ' '.join(fake.address().splitlines())
 state=fake.state_abbr()
 
-adr2 = str(fake.street_address()) + ', ' + str(fake.city()) + ',' + state + ' '+ fake.postcode_in_state(state)
+adr2 = str(fake.street_address()) + ', ' + str(fake.city()) + ', ' + state + ' '+ fake.postcode_in_state(state)
 
 print(adr2 )
 
