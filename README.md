@@ -5,9 +5,10 @@ https://reg.summit.snowflake.com/flow/snowflake/summit24/sessions/page/catalog/s
 
 Apache Iceberg provides an open storage standard for data lakes and lakehouses. Join this session to see how Snowflake’s Iceberg Tables provide interoperability to query a single copy of data from many engines across AWS, Azure, GCP, Databricks, and more.
 
+You can read more about this pattern on Medium:
+https://medium.com/snowflake/how-to-integrate-databricks-with-snowflake-managed-iceberg-tables-7a8895c2c724 
+
 Architecture for the codebase 
 ![](https://github.com/sfc-gh-pneedleman/Summit2024_Iceberg/blob/main/images/Summit2024_Iceberg.png)
 
 
-You can read more about this pattern on Medium:
-https://medium.com/snowflake/how-to-integrate-databricks-with-snowflake-managed-iceberg-tables-7a8895c2c724 
