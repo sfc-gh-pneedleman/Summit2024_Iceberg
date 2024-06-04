@@ -7,3 +7,7 @@ Apache Iceberg provides an open storage standard for data lakes and lakehouses. 
 
 Architecture for the codebase 
 ![](https://github.com/sfc-gh-pneedleman/Summit2024_Iceberg/blob/main/images/Summit2024_Iceberg.png)
+
+
+You can read more about this pattern on Medium:
+https://medium.com/snowflake/how-to-integrate-databricks-with-snowflake-managed-iceberg-tables-7a8895c2c724 
