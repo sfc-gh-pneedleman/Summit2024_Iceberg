@@ -105,7 +105,7 @@ CREATE STREAM IF NOT EXISTS CURATED.SALES_TXN_STREAM ON DYNAMIC TABLE CURATED.SA
 --create task to load iceberg table from stream
 --use cortex functions for enchanced processing 
 create TASK IF NOT EXISTS CURATED.INSERT_SALES_TXN_TO_ICEBERG
-	--schedule='1 MINUTE'  -- remove schedule to create triggered task 
+	--schedule='1 MINUTE'  -- remove schedule to create triggered task
 	USER_TASK_MANAGED_INITIAL_WAREHOUSE_SIZE='MEDIUM'
 	when SYSTEM$STREAM_HAS_DATA('SALES_TXN_STREAM')
 	as INSERT INTO ICEBERG_SALES_TXN 
