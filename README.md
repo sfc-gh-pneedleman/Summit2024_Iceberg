@@ -1,4 +1,4 @@
-# Snowflake Summit 2024: Snowpark Data Lake Workloads
+# Snowflake Summit 2024: NTEROPERABILITY WITH SNOWFLAKE-MANAGED ICEBERG TABLES, 
 
 The code in this repo was presented at the 2024 Snowflake Summit. Link to Abstract:
 https://reg.summit.snowflake.com/flow/snowflake/summit24/sessions/page/catalog/session/1708733447669001y06U 
